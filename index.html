@@ -8,7 +8,7 @@
 <title>Sistema Cirúrgico — Dr. Cádes Viana</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400 ;0,500;0,600;1,300;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #070707;
@@ -2045,7 +2045,6 @@ async function fetchMunicipios(uf) {
 
 /* =====================================================
    CONFIGURAÇÃO SEGURA — chaves ficam no localStorage
-   do navegador, nunca no código-fonte
    ===================================================== */
 const CONFIG_KEY = 'siscirurgico_config';
 
@@ -2056,56 +2055,49 @@ function getConfig() {
   } catch { return null; }
 }
 
-function saveConfig(url, pub, sec) {
-  localStorage.setItem(CONFIG_KEY, JSON.stringify({ url, pub, sec }));
+function saveConfig(url, anon, service) {
+  localStorage.setItem(CONFIG_KEY, JSON.stringify({ url, anon, service }));
 }
 
 function clearConfig() {
   localStorage.removeItem(CONFIG_KEY);
 }
 
-/* Tela de configuração inicial */
 function showConfigScreen() {
   document.body.innerHTML = `
-    <div style="min-height:100vh; background:#070707; display:flex; align-items:center; justify-content:center; padding:24px; font-family:'Montserrat',sans-serif;">
-      <div style="max-width:480px; width:100%;">
-        <div style="display:flex; align-items:center; gap:12px; margin-bottom:40px;">
-          <div style="width:44px; height:44px; border:1px solid #c9a96e; display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond',serif; font-size:20px; color:#c9a96e;">CV</div>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <div style="min-height:100vh;background:#070707;display:flex;align-items:center;justify-content:center;padding:24px;font-family:'Montserrat',sans-serif;">
+      <div style="max-width:480px;width:100%;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:40px;">
+          <div style="width:44px;height:44px;border:1px solid #c9a96e;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:20px;color:#c9a96e;">CV</div>
           <div>
-            <div style="font-weight:600; font-size:13px; text-transform:uppercase; letter-spacing:0.12em; color:#fff;">Dr. Cádes Viana</div>
-            <div style="font-size:10px; text-transform:uppercase; letter-spacing:0.18em; color:#c9a96e; margin-top:2px;">Sistema Cirúrgico</div>
+            <div style="font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:0.12em;color:#fff;">Dr. Cádes Viana</div>
+            <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.18em;color:#c9a96e;margin-top:2px;">Sistema Cirúrgico</div>
           </div>
         </div>
-
-        <h1 style="font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:400; font-size:32px; color:#ddd0b8; margin-bottom:8px;">Configuração Inicial</h1>
-        <p style="font-size:12px; color:rgba(255,255,255,0.5); margin-bottom:32px; line-height:1.6;">
-          Configure a conexão com o banco de dados. Isso só precisa ser feito uma vez por dispositivo.
-        </p>
+        <h1 style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:32px;color:#ddd0b8;margin-bottom:8px;font-weight:400;">Configuração Inicial</h1>
+        <p style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:32px;line-height:1.6;">Configure a conexão com o banco de dados. Isso só precisa ser feito uma vez por dispositivo.</p>
 
         <div style="margin-bottom:16px;">
-          <label style="display:block; font-size:10px; text-transform:uppercase; letter-spacing:0.12em; color:rgba(255,255,255,0.5); margin-bottom:8px;">URL do Supabase</label>
+          <label style="display:block;font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.5);margin-bottom:8px;">URL do Supabase</label>
           <input id="cfg-url" type="text" value="https://xynwodwznuprpqztwlso.supabase.co"
-            style="width:100%; background:#161616; border:1px solid rgba(255,255,255,0.06); color:#fff; font-family:'Montserrat',sans-serif; font-size:13px; padding:12px 14px; outline:none; box-sizing:border-box;">
+            style="width:100%;background:#161616;border:1px solid rgba(255,255,255,0.06);color:#fff;font-family:'Montserrat',sans-serif;font-size:12px;padding:12px 14px;outline:none;box-sizing:border-box;">
         </div>
-
         <div style="margin-bottom:16px;">
-          <label style="display:block; font-size:10px; text-transform:uppercase; letter-spacing:0.12em; color:rgba(255,255,255,0.5); margin-bottom:8px;">Chave Publicável (sb_publishable_...)</label>
-          <input id="cfg-pub" type="text" placeholder="sb_publishable_..."
-            style="width:100%; background:#161616; border:1px solid rgba(255,255,255,0.06); color:#fff; font-family:'Montserrat',sans-serif; font-size:13px; padding:12px 14px; outline:none; box-sizing:border-box;">
+          <label style="display:block;font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.5);margin-bottom:8px;">Chave Anon (eyJ...)</label>
+          <input id="cfg-anon" type="password" placeholder="eyJhbGci..."
+            style="width:100%;background:#161616;border:1px solid rgba(255,255,255,0.06);color:#fff;font-family:'Montserrat',sans-serif;font-size:12px;padding:12px 14px;outline:none;box-sizing:border-box;">
         </div>
-
         <div style="margin-bottom:32px;">
-          <label style="display:block; font-size:10px; text-transform:uppercase; letter-spacing:0.12em; color:rgba(255,255,255,0.5); margin-bottom:8px;">Chave Secreta (sb_secret_...)</label>
-          <input id="cfg-sec" type="password" placeholder="sb_secret_..."
-            style="width:100%; background:#161616; border:1px solid rgba(255,255,255,0.06); color:#fff; font-family:'Montserrat',sans-serif; font-size:13px; padding:12px 14px; outline:none; box-sizing:border-box;">
+          <label style="display:block;font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.5);margin-bottom:8px;">Chave Service Role (eyJ...)</label>
+          <input id="cfg-service" type="password" placeholder="eyJhbGci..."
+            style="width:100%;background:#161616;border:1px solid rgba(255,255,255,0.06);color:#fff;font-family:'Montserrat',sans-serif;font-size:12px;padding:12px 14px;outline:none;box-sizing:border-box;">
         </div>
-
         <button onclick="applyConfig()"
-          style="width:100%; background:#c9a96e; border:none; color:#070707; font-family:'Montserrat',sans-serif; font-weight:600; font-size:12px; text-transform:uppercase; letter-spacing:0.14em; padding:16px; cursor:pointer;">
+          style="width:100%;background:#c9a96e;border:none;color:#070707;font-family:'Montserrat',sans-serif;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:0.14em;padding:16px;cursor:pointer;">
           Conectar e Entrar
         </button>
-
-        <p style="font-size:11px; color:rgba(255,255,255,0.25); margin-top:16px; text-align:center; line-height:1.6;">
+        <p style="font-size:11px;color:rgba(255,255,255,0.25);margin-top:16px;text-align:center;line-height:1.6;">
           As chaves ficam salvas apenas neste dispositivo.<br>Nunca são enviadas para servidores externos.
         </p>
       </div>
@@ -2114,16 +2106,12 @@ function showConfigScreen() {
 }
 
 async function applyConfig() {
-  const url = document.getElementById('cfg-url').value.trim();
-  const pub = document.getElementById('cfg-pub').value.trim();
-  const sec = document.getElementById('cfg-sec').value.trim();
+  const url     = document.getElementById('cfg-url').value.trim();
+  const anon    = document.getElementById('cfg-anon').value.trim();
+  const service = document.getElementById('cfg-service').value.trim();
 
-  if (!url || !pub || !sec) {
-    alert('Preencha todos os campos.');
-    return;
-  }
+  if (!url || !anon || !service) { alert('Preencha todos os campos.'); return; }
 
-  // Testar conexão antes de salvar
   const btn = document.querySelector('button');
   btn.textContent = 'Testando conexão...';
   btn.disabled = true;
@@ -2131,13 +2119,12 @@ async function applyConfig() {
   try {
     const res = await fetch(`${url}/rest/v1/patients?limit=1`, {
       headers: {
-        'apikey': pub,
-        'Authorization': `Bearer ${sec}`
+        'apikey': anon,
+        'Authorization': `Bearer ${service}`
       }
     });
-
-    if (res.ok || res.status === 406) {
-      saveConfig(url, pub, sec);
+    if (res.ok || res.status === 404 || res.status === 400) {
+      saveConfig(url, anon, service);
       location.reload();
     } else {
       btn.textContent = 'Conectar e Entrar';
@@ -2151,10 +2138,9 @@ async function applyConfig() {
   }
 }
 
-/* Inicializar configuração — retorna true se configurado */
 function initConfig() {
   const cfg = getConfig();
-  if (!cfg || !cfg.url || !cfg.pub || !cfg.sec) {
+  if (!cfg || !cfg.url || !cfg.anon || !cfg.service) {
     showConfigScreen();
     return false;
   }
@@ -2164,7 +2150,6 @@ function initConfig() {
 /* =====================================================
    DATABASE LAYER — SUPABASE (usa config do localStorage)
    ===================================================== */
-
 let _supaConfig = null;
 
 function getSupaConfig() {
@@ -2178,14 +2163,19 @@ async function supaFetch(path, opts = {}) {
   if (!cfg) throw new Error('Supabase não configurado');
 
   const url = `${cfg.url}/rest/v1${path}`;
+  const prefer = opts.prefer || (opts.method === 'GET' ? undefined : 'return=representation');
   const headers = {
-    'apikey': cfg.pub,
-    'Authorization': `Bearer ${cfg.sec}`,
+    'apikey': cfg.anon,
+    'Authorization': `Bearer ${cfg.service}`,
     'Content-Type': 'application/json',
-    'Prefer': opts.prefer || 'return=representation',
+    ...(prefer ? { 'Prefer': prefer } : {}),
     ...opts.headers
   };
-  const res = await fetch(url, { method: opts.method || 'GET', headers, body: opts.body });
+  const res = await fetch(url, {
+    method: opts.method || 'GET',
+    headers,
+    body: opts.body
+  });
   if (!res.ok) {
     const txt = await res.text();
     throw new Error(`Supabase ${res.status}: ${txt}`);
